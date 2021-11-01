@@ -62,9 +62,10 @@ class SearchProblem:
 
 # Nos de uma arvore de pesquisa
 class SearchNode:
-    def __init__(self,state,parent): 
+    def __init__(self,state,parent, depth): 
         self.state = state
         self.parent = parent
+        self.depth = depth 
 
     def in_parent(self, state):
         if self.state == state:
@@ -85,7 +86,7 @@ class SearchTree:
     # construtor
     def __init__(self,problem, strategy='breadth'): 
         self.problem = problem
-        root = SearchNode(problem.initial, None)
+        root = SearchNode(problem.initial, None, 0)
         self.open_nodes = [root]
         self.strategy = strategy
         self.solution = None
@@ -108,7 +109,7 @@ class SearchTree:
             lnewnodes = []
             for a in self.problem.domain.actions(node.state):
                 newstate = self.problem.domain.result(node.state,a)
-                newnode = SearchNode(newstate,node)
+                newnode = SearchNode(newstate,node, node.depth+1)
                 if not node.in_parent(newstate):
                     lnewnodes.append(newnode)
 
