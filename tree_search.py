@@ -91,6 +91,10 @@ class SearchTree:
         self.strategy = strategy
         self.solution = None
 
+    @property
+    def length(self):
+        return self.solution.depth
+
     # obter o caminho (sequencia de estados) da raiz ate um no
     def get_path(self,node):
         if node.parent == None:
