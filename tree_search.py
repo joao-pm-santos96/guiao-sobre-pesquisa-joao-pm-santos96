@@ -94,6 +94,8 @@ class SearchTree:
         self.solution = None
         self.terminals = 1
         self.non_terminals = 0
+        self.high_cost_nodes = [root]
+        self.avg_depth = 0
 
     @property
     def length(self):
@@ -121,9 +123,16 @@ class SearchTree:
     def search(self, limit = None):
         while self.open_nodes != []:
             node = self.open_nodes.pop(0)
+
+            if node.cost > self.high_cost_nodes[0].cost:
+                self.high_cost_nodes = [node]
+            elif node.cost == self.high_cost_nodes[0].cost:
+                self.high_cost_nodes.append(node)
+
             if self.problem.goal_test(node.state):
                 self.terminals = len(self.open_nodes) + 1
                 self.solution = node
+                self.avg_depth = self.solution.depth/(self.terminals + self.non_terminals)
                 return self.get_path(node)
             # increment non terminal nodes
             self.non_terminals +=1
