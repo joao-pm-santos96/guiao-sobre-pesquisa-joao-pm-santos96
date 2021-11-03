@@ -90,10 +90,17 @@ class SearchTree:
         self.open_nodes = [root]
         self.strategy = strategy
         self.solution = None
+        self.terminals = 1
+        self.non_terminals = 0
 
     @property
     def length(self):
         return self.solution.depth
+
+    # fator de ramificacao
+    @property
+    def avg_branching(self):
+        return round((self.terminals + self.non_terminals -1 )/self.non_terminals, 2)
 
     # obter o caminho (sequencia de estados) da raiz ate um no
     def get_path(self,node):
@@ -108,8 +115,11 @@ class SearchTree:
         while self.open_nodes != []:
             node = self.open_nodes.pop(0)
             if self.problem.goal_test(node.state):
+                self.terminals = len(self.open_nodes) + 1
                 self.solution = node
                 return self.get_path(node)
+            # increment non terminal nodes
+            self.non_terminals +=1
             lnewnodes = []
             for a in self.problem.domain.actions(node.state):
                 newstate = self.problem.domain.result(node.state,a)
