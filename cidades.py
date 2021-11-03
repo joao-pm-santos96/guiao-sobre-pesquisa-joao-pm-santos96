@@ -11,6 +11,7 @@
 
 
 from tree_search import *
+from math import hypot
 
 class Cidades(SearchDomain):
     def __init__(self,connections, coordinates):
@@ -35,7 +36,16 @@ class Cidades(SearchDomain):
         return None
         
     def heuristic(self, city, goal_city):
-        pass
+        x_orig, y_orig = self.coordinates[city]
+        x_dest, y_dest = self.coordinates[goal_city]
+
+        #normalizar o vetor para começar em 0,0
+        x = abs(x_orig - x_dest)
+        y = abs(y_orig - y_dest) 
+
+        #return sqrt(x**2 + y**2) -> hipotenusa dá-nos a distancia entre dois pontos
+        return hypot(x,y)
+
     def satisfies(self, city, goal_city):
         return goal_city==city
 
